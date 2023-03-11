@@ -5,7 +5,7 @@ export default function Leaflet({
     setShow,
     children,
 }) {
-    const leafletRef = useRef < HTMLDivElement > (null);
+    const leafletRef = useRef(null);
     const controls = useAnimation();
     const transitionProps = { type: "spring", stiffness: 500, damping: 30 };
     useEffect(() => {

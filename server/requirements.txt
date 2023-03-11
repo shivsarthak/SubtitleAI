@@ -1,0 +1,8 @@
+flask 
+werkzeug 
+openai-whisper 
+celery 
+flask-cors 
+flask-socketio 
+ffmpeg-python
+redis

@@ -8,6 +8,7 @@ import { motion } from "framer-motion";
 import Layout from '../components/layout';
 import { useUploadModal } from '../components/upload-modal';
 import { FADE_DOWN_ANIMATION_VARIANTS } from '../constants/animations';
+import Howto from '../components/how-to';
 
 
 export default function Home() {
@@ -57,8 +58,6 @@ export default function Home() {
         >
           <Balancer ratio={0.6}>
             Effortlessly add accurate subtitles to your videos with our AI-powered subtitle generator.
-
-
           </Balancer>
         </motion.p>
         <motion.div variants={FADE_DOWN_ANIMATION_VARIANTS} className="-mb-4">
@@ -74,8 +73,8 @@ export default function Home() {
             {/* Write subtitle here  */}
           </p>
         </motion.div>
-
       </motion.div>
+      <Howto></Howto>
     </Layout>
   );
 };
