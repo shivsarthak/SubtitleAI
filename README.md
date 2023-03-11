@@ -3,7 +3,6 @@
 ## Run Frontend
 ### Install Dependencies
 ```shell
-cd my-app
 npm install
 ```
 ### Run React App
