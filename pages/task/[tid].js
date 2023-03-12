@@ -6,13 +6,11 @@ import { useEffect, useState } from 'react';
 import { ClipboardCopy, RefreshCw, Upload } from "lucide-react";
 import { motion } from "framer-motion";
 import Layout from '../../components/layout';
-import { API_ENDPOINT } from '../../constants/endpoint';
 import io from "socket.io-client";
 import { Download } from "lucide-react";
-
+import { API_ENDPOINT } from '../../constants/strings';
 
 export async function getTaskData(tid) {
-
     const res = await fetch(API_ENDPOINT + '/task/' + tid);
     const data = await res.json();
     return data;

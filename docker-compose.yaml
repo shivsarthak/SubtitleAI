@@ -1,0 +1,50 @@
+version: '3'
+
+services:
+  frontend:
+    build: .
+    command: npm run start
+    ports:
+      - "8888:3000"
+    depends_on:
+      - api
+    environment:
+      - DOMAIN=
+      - API_ENDPOINT=
+      - TITLE=
+      - DESC="Automatically generate accurate subtitles for your videos with our user-friendly online tool. Our website uses advanced speech recognition technology to create SRT files quickly and easily. With our tool, you can improve your video accessibility, reach a wider audience, and save time on manual transcription. Try it out today and experience the benefits of our reliable subtitle generator!"
+  redis:
+    image: redis
+  api:
+    build:
+      context: ./server/
+    command: waitress-serve --host 0.0.0.0 --port 8080 generate_subs:app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - redis
+    volumes:
+      - shared-data:/shared-data
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379
+      - CELERY_BACKEND_URL=redis://redis:6379
+      - OUTPUT_FOLDER=/shared-data/output
+      - UPLOAD_FOLDER=/shared-data/temp
+      - BUILD_MODE=PROD
+
+  celery-worker:
+    build: ./server
+    command: celery -A generate_subs.celery worker --loglevel=info
+    depends_on:
+      - redis
+    volumes:
+      - shared-data:/shared-data
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379
+      - CELERY_BACKEND_URL=redis://redis:6379
+      - OUTPUT_FOLDER=/shared-data/output
+      - UPLOAD_FOLDER=/shared-data/temp
+      - BUILD_MODE=PROD
+
+volumes:
+  shared-data:

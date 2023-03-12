@@ -1,18 +1,18 @@
 # AI Subtitle Generation Website
 
-## Run Frontend
-### Install Dependencies
+### Run Frontend
+#### Install Dependencies
 ```shell
 npm install
 ```
-### Run React App
+#### Run React App
 ```shell
 npm run dev
 ``` 
 
-## Setup Backend
+### Setup Backend
 
-### Install dependencies
+#### Install dependencies
 > Install ffmpeg on system
 ```shell
 # on Ubuntu or Debian
@@ -34,14 +34,24 @@ scoop install ffmpeg
 cd server
 python pip install flask werkzeug openai-whisper celery flask-cors flask-socketio ffmpeg-python
 ``` 
-### Run Flask API
+#### Run Flask API
 ```shell
 python generate_subs.py
 ```
-### Run Celery Worker nodes
+#### Run Celery Worker nodes
 ```shell
 # On windows machine
 python -m celery -A generate_subs.celery worker --pool=solo -l info
 # On Other OS machine
 python -m celery -A generate_subs.celery worker -l info
+```
+
+## Deploy using Docker
+---
+
+
+> ### Note: Before deploying using docker-compose make sure to set the environment variables correctly for all the services
+
+```shell
+docker-compose up --build -d
 ```

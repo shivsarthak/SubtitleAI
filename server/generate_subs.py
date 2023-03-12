@@ -14,24 +14,25 @@ from flask_socketio import SocketIO
 
 app = Flask(__name__)
 CORS(app)
+
+
 app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024 * 75
 app.config['UPLOAD_EXTENSIONS'] = ['mp4', 'avi', 'mov']
 app.config['PROCESSING_MODE'] = ['fast', 'balanced', 'accurate']
-app.config['UPLOAD_FOLDER'] = os.path.abspath('./tmp/uploads/')
-app.config['OUTPUT_FOLDER'] = os.path.abspath('./tmp/output/')
-app.config['CELERY_BROKER_URL'] = 'redis://192.168.0.191:6379'
-app.config['CELERY_BACKEND_URL'] = 'redis://192.168.0.191:6379'
-# app.config['HASH_SALT'] = os.urandom(8).hex()
-app.config['HASH_SALT'] = b'testing'.hex()
+app.config['UPLOAD_FOLDER'] = os.environ.get('UPLOAD_FOLDER',os.path.abspath('./tmp/uploads/'))
+app.config['OUTPUT_FOLDER'] = os.environ.get('OUTPUT_FOLDER',os.path.abspath('./tmp/output/'))
+app.config['CELERY_BROKER_URL'] = os.environ.get('CELERY_BROKER_URL','redis://192.168.0.191:6379')
+app.config['CELERY_BACKEND_URL'] = os.environ.get('CELERY_BACKEND_URL','redis://192.168.0.191:6379')
+
+if os.environ.get('BUILD_MODE','DEV') == "PROD":
+    app.config['HASH_SALT'] = os.urandom(8).hex()
+else:
+    app.config['HASH_SALT'] = b'testing'.hex()
+
 socketio = SocketIO(app, cors_allowed_origins="*")
-
-celery = Celery(
-    app.name, broker=app.config['CELERY_BROKER_URL'], backend=app.config['CELERY_BACKEND_URL'])
+celery = Celery(app.name, broker=app.config['CELERY_BROKER_URL'], backend=app.config['CELERY_BACKEND_URL'])
 celery.conf.update(app.config)
-celery.conf.update(
-    result_extended=True
-)
-
+celery.conf.update(result_extended=True)
 
 def hash_id(id: str):
     return hashlib.md5((id+app.config['HASH_SALT']).encode('utf-8')).hexdigest()[0:8]
@@ -81,11 +82,9 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1] in app.config['UPLOAD_EXTENSIONS']
 
 
-@task_postrun.connect
-def post_run(task_id=None, **kwargs):
-    print("Task ID:", task_id)
-    status = AsyncResult(app=celery, id=task_id)
-    socketio.emit('task_finished', {'id': task_id, 'state': status.state})
+@app.route('/')
+def post_run():
+    return jsonify({'status':'Running'}),200
 
 
 @app.route('/upload_video', methods=['POST'])

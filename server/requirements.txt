@@ -6,3 +6,4 @@ flask-cors
 flask-socketio 
 ffmpeg-python
 redis
+waitress

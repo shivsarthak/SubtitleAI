@@ -1,7 +1,7 @@
 import Head from "next/head";
-import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
+import { DESC, DOMAIN, TITLE } from "../constants/strings";
 
 export default function Layout({ children }) {
     const threshold = 50;
@@ -9,10 +9,9 @@ export default function Layout({ children }) {
     const onScroll = useCallback(() => {
         setScrolled(window.pageYOffset > threshold);
     }, [threshold]);
-    const DOMAIN = "http://localhost:3000"
-    const title = "SubtitleAI - Generate Subtitles for Videos"
-    const description = "Effortlessly add subtitles to your video with our AI-powered SRT file generator. Our website simplifies the process of creating subtitles, making it easy to enhance the accessibility and reach of your video content."
-    const image = `${DOMAIN}/api/og`
+    const title = TITLE
+    const description = DESC
+    const image = `${DOMAIN}/public/logo.png`
     useEffect(() => {
         window.addEventListener("scroll", onScroll);
         return () => window.removeEventListener("scroll", onScroll);
@@ -25,11 +24,11 @@ export default function Layout({ children }) {
                 <meta name="description" content={description} />
                 <meta charSet="utf-8" />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
-                <meta itemProp="image" content={image} />
-                <meta property="og:logo" content={`${DOMAIN}/logo.png`}></meta>
+                {/* <meta itemProp="image" content={image} />
+                <meta property="og:logo" content={image}></meta> */}
                 <meta property="og:title" content={title} />
                 <meta property="og:description" content={description} />
-                <meta property="og:image" content={image} />
+                {/* <meta property="og:image" content={image} /> */}
 
 
             </Head>
@@ -43,7 +42,7 @@ export default function Layout({ children }) {
                 <div className="mx-5 flex h-16 max-w-screen-xl items-center justify-between xl:mx-auto">
                     <Link href="/" className="flex items-center font-display text-2xl">
 
-                        <p>SubtitlesAI</p>
+                        <p>{title}</p>
                     </Link>
                     <div className="flex items-center space-x-4">
                         <a
@@ -81,6 +80,9 @@ export default function Layout({ children }) {
                     >
                         Shiv Sarthak Sabhlok
                     </a>
+                    .
+                    {" "}
+                    mail@shivsarthak.com
                 </p>
             </div>
         </>
