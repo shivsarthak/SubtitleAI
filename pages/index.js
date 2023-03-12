@@ -32,7 +32,7 @@ export default function Home() {
     <Layout>
       <UploadModal />
       <motion.div
-        className="max-w-2xl px-5 xl:px-0"
+        className="max-w-screen px-5 xl:px-0"
         initial="hidden"
         whileInView="show"
         animate="show"
@@ -46,35 +46,41 @@ export default function Home() {
           },
         }}
       >
-        <motion.h1
-          className="bg-gradient-to-br from-black to-stone-500 bg-clip-text text-center font-display text-4xl font-bold tracking-[-0.02em] text-transparent drop-shadow-sm md:text-7xl md:leading-[5rem]"
-          variants={FADE_DOWN_ANIMATION_VARIANTS}
-        >
-          <Balancer>Generate Subtitles for any video using AI</Balancer>
-        </motion.h1>
-        <motion.p
-          className="mt-6 text-center text-gray-500 md:text-xl"
-          variants={FADE_DOWN_ANIMATION_VARIANTS}
-        >
-          <Balancer ratio={0.6}>
-            Effortlessly add accurate subtitles to your videos with our AI-powered subtitle generator.
-          </Balancer>
-        </motion.p>
-        <motion.div variants={FADE_DOWN_ANIMATION_VARIANTS} className="-mb-4">
-          <button
-            className="group mx-auto mt-6 flex max-w-fit items-center justify-center space-x-2 rounded-full border border-black bg-black px-5 py-2 text-sm text-white transition-colors hover:bg-white hover:text-black"
-            onClick={() => setShowUploadModal(true)}
-
+        <div className='max-w-2xl mx-auto'>
+          <motion.h1
+            className="bg-gradient-to-br from-black to-stone-500 bg-clip-text text-center font-display text-6xl font-bold tracking-[-0.02em] text-transparent drop-shadow-sm md:text-7xl md:leading-[5rem]"
+            variants={FADE_DOWN_ANIMATION_VARIANTS}
           >
-            <Upload className="h-5 w-5 text-white group-hover:text-black" />
-            <p>Upload video file</p>
-          </button>
-          <p className="mt-2 text-center text-sm text-gray-500">
-            {/* Write subtitle here  */}
-          </p>
-        </motion.div>
+            <Balancer>Generate Subtitles for any video using AI</Balancer>
+          </motion.h1>
+          <motion.p
+            className="mt-6 text-center text-gray-500 md:text-xl"
+            variants={FADE_DOWN_ANIMATION_VARIANTS}
+          >
+            <Balancer ratio={0.6}>
+              Effortlessly add accurate subtitles to your videos with our AI-powered subtitle generator.
+            </Balancer>
+          </motion.p>
+          <motion.div variants={FADE_DOWN_ANIMATION_VARIANTS} className="-mb-4">
+            <button
+              className="group mx-auto mt-6 flex max-w-fit items-center justify-center space-x-2 rounded-full border border-black bg-black px-5 py-2 text-sm text-white transition-colors hover:bg-white hover:text-black"
+              onClick={() => setShowUploadModal(true)}
+
+            >
+              <Upload className="h-5 w-5 text-white group-hover:text-black" />
+              <p>Upload video file</p>
+            </button>
+            <p className="mt-2 text-center text-sm text-gray-500">
+              {/* Write subtitle here  */}
+            </p>
+
+          </motion.div>
+        </div>
+        <Howto />
       </motion.div>
-      <Howto></Howto>
+
+
+
     </Layout>
   );
 };

@@ -10,10 +10,11 @@ import { UploadCloud } from "lucide-react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/router";
 import Modal from "./modal";
-import { API_ENDPOINT } from "../constants/endpoint";
+import { API_ENDPOINT } from "../constants/strings"
 
 
 const LoadingDots = ({ color = "#000" }) => {
+
     return (
         <span>
             <span style={{ backgroundColor: color }} />
