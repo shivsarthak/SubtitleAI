@@ -5,13 +5,13 @@ services:
     build: .
     command: npm run start
     ports:
-      - "8888:3000"
+      - "7777:3000"
     depends_on:
       - api
     environment:
-      - DOMAIN=
-      - API_ENDPOINT=
-      - TITLE=
+      - DOMAIN=https://subai.pro
+      - API_ENDPOINT=https://subai.pro/api
+      - TITLE=SubAI
       - DESC="Automatically generate accurate subtitles for your videos with our user-friendly online tool. Our website uses advanced speech recognition technology to create SRT files quickly and easily. With our tool, you can improve your video accessibility, reach a wider audience, and save time on manual transcription. Try it out today and experience the benefits of our reliable subtitle generator!"
   redis:
     image: redis
