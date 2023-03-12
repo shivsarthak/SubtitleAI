@@ -2,6 +2,7 @@ version: '3'
 
 services:
   frontend:
+    image: 192.168.0.191:5000/subaipro/frontend:latest
     build: .
     command: npm run start
     ports:
@@ -16,6 +17,7 @@ services:
   redis:
     image: redis
   api:
+    image: 192.168.0.191:5000/subaipro/api:latest
     build:
       context: ./server/
     command: waitress-serve --host 0.0.0.0 --port 8080 generate_subs:app
@@ -33,6 +35,7 @@ services:
       - BUILD_MODE=PROD
 
   celery-worker:
+    image: 192.168.0.191:5000/subaipro/worker:latest
     build: ./server
     command: celery -A generate_subs.celery worker --loglevel=info
     depends_on:
