@@ -66,24 +66,19 @@ const Post = ({ taskData }) => {
     var status = <Processing />;
     const { tid } = router.query;
 
-    useEffect(() => {
-        // const socket = io(API_ENDPOINT);
+    // useEffect(() => {
+    //     const socket = io(API_ENDPOINT + '/events');
+    //     socket.on(tid.split('+')[0], (data) => {
+    //         getTaskData(tid).then((updates) => {
+    //             setResult(updates.state);
+    //         })
 
-        // socket.on('task_finished', (data) => {
-        //     console.log(data);
-        //     if (data.id == tid.split('+')[0]) {
-        //         setResult(data.state);
+    //     });
 
-        //     }
-        // });
-        // socket.on('connect', () => {
-        //     console.log('Connected to server');
-        // });
-
-        // return () => {
-        //     socket.disconnect();
-        // };
-    }, []);
+    //     return () => {
+    //         socket.disconnect();
+    //     };
+    // }, []);
 
 
 
@@ -167,10 +162,11 @@ const Post = ({ taskData }) => {
                         <h1 className='font-semibold text-gray-700 text-sm '>Status:</h1>
                         {status}
                     </div>
-                    {['SUCCESS'].includes(state) && <button className=" mt-2  bg-green-400 hover:bg-green-500 transition-colors py-2 px-2 rounded-xl inline-flex justify-center items-center">
+                    {['SUCCESS'].includes(state) && <a href={API_ENDPOINT+'/download/'+tid}> <button  className=" mt-2  bg-green-400 hover:bg-green-500 transition-colors py-2 px-2 rounded-xl inline-flex justify-center items-center">
                         <Download className="h-5 w-5 text-white" />
                         <span className=' px-2 text-white'>Download</span>
-                    </button>}
+                    </button></a>
+                    }
 
                 </div>
             </motion.div>

@@ -32,10 +32,10 @@ celery = Celery(app.name, broker=app.config['CELERY_BROKER_URL'], backend=app.co
 celery.conf.update(app.config)
 celery.conf.update(result_extended=True)
 
+
 def hash_id(id: str):
     return hashlib.md5((id+app.config['HASH_SALT']).encode('utf-8')).hexdigest()[0:8]
 
-print(os.environ.get('BUILD_MODE'))
 @celery.task(trail=True, bind=True)
 def generate_subtitles_task(self, video_name, model_size):
     print(self.request.id)
@@ -75,6 +75,9 @@ def generate_subtitles_task(self, video_name, model_size):
     except Exception as e:
         abort(500, 'Error processing the video file: {}'.format(str(e)))
 
+@task_postrun.connect(weak=False)
+def task_postrun_handler(sender=None, task_id=None, **kwargs):
+    socketio.emit(task_id, {'msg':'ok'},namespace='/api/events')
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1] in app.config['UPLOAD_EXTENSIONS']
@@ -166,7 +169,7 @@ def download_file(tid: str):
     if (status.successful()):
         filename = os.path.join(app.config['OUTPUT_FOLDER'], status.result)
         if os.path.isfile(filename):
-            return send_file(filename), 200
+            return send_file(filename,as_attachment=True), 200
     return jsonify(
         {'state': "404",
             'error': f'File Not Found'
