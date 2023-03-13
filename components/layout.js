@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
-import { DESC, DOMAIN, TITLE } from "../constants/strings";
+import { DESC,  TITLE } from "../constants/strings";
 
 export default function Layout({ children }) {
     const threshold = 50;
@@ -11,7 +11,6 @@ export default function Layout({ children }) {
     }, [threshold]);
     const title = TITLE
     const description = DESC
-    const image = `${DOMAIN}/public/logo.png`
     useEffect(() => {
         window.addEventListener("scroll", onScroll);
         return () => window.removeEventListener("scroll", onScroll);
@@ -69,8 +68,8 @@ export default function Layout({ children }) {
             </main>
 
 
-            <div className="absolute w-full border-t border-gray-200 bg-white py-5 text-center">
-                <p className="text-gray-500">
+            <div className="absolute w-full border-t border-gray-200 bg-white py-5 text-center ">
+                <p className="text-gray-500 text-xs">
                     Created by{" "}
                     <a
                         className="font-semibold text-gray-600 transition-colors hover:text-black"

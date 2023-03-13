@@ -16,16 +16,8 @@ export async function getTaskData(tid) {
     return data;
 }
 
-export const getStaticPaths = async () => {
 
-
-    return {
-        paths: [],
-        fallback: 'blocking'
-    }
-}
-
-export async function getStaticProps({ params }) {
+export async function getServerSideProps({ params }) {
     const taskData = await getTaskData(params.tid);
     if (taskData.state == "404") {
         return {
@@ -40,33 +32,32 @@ export async function getStaticProps({ params }) {
 }
 
 const Success = () => {
-    return <td className="px-4 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
+    return <div className="px-2 mx-2 py-2 text-sm font-medium text-gray-700 whitespace-nowrap">
         <div className="inline-flex items-center px-3 py-1 rounded-full gap-x-2 text-emerald-500 bg-emerald-100/60 ">
             <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M10 3L4.5 8.5L2 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
-
             <h2 className="text-sm font-normal">Success</h2>
         </div>
-    </td>;
+    </div>;
 }
 const Failed = () => {
-    return <td className="px-4 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
+    return <div className="px-2 mx-2 py-2 text-sm font-medium text-gray-700 whitespace-nowrap">
         <div className="inline-flex items-center px-3 py-1 text-red-500 rounded-full gap-x-2 bg-red-100/60 ">
             <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M9 3L3 9M3 3L9 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
             <h2 className="text-sm font-normal">Failed</h2>
         </div>
-    </td>;
+    </div>;
 }
 const Processing = () => {
-    return <td className="px-4 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
+    return <div className="px-2 mx-2 py-2 text-sm font-medium text-gray-700 whitespace-nowrap">
         <div className="inline-flex items-center px-3 py-1 text-gray-500 rounded-full gap-x-2 bg-gray-100/60 ">
             <svg width="24" height="24" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill="#000000" d="M512 64a32 32 0 0 1 32 32v192a32 32 0 0 1-64 0V96a32 32 0 0 1 32-32zm0 640a32 32 0 0 1 32 32v192a32 32 0 1 1-64 0V736a32 32 0 0 1 32-32zm448-192a32 32 0 0 1-32 32H736a32 32 0 1 1 0-64h192a32 32 0 0 1 32 32zm-640 0a32 32 0 0 1-32 32H96a32 32 0 0 1 0-64h192a32 32 0 0 1 32 32zM195.2 195.2a32 32 0 0 1 45.248 0L376.32 331.008a32 32 0 0 1-45.248 45.248L195.2 240.448a32 32 0 0 1 0-45.248zm452.544 452.544a32 32 0 0 1 45.248 0L828.8 783.552a32 32 0 0 1-45.248 45.248L647.744 692.992a32 32 0 0 1 0-45.248zM828.8 195.264a32 32 0 0 1 0 45.184L692.992 376.32a32 32 0 0 1-45.248-45.248l135.808-135.808a32 32 0 0 1 45.248 0zm-452.544 452.48a32 32 0 0 1 0 45.248L240.448 828.8a32 32 0 0 1-45.248-45.248l135.808-135.808a32 32 0 0 1 45.248 0z"></path></g></svg>
             <h2 className="text-sm font-normal">Processing</h2>
         </div>
-    </td>;
+    </div>;
 }
 
 const Post = ({ taskData }) => {
@@ -145,9 +136,9 @@ const Post = ({ taskData }) => {
                 className=' w-full'
                 variants={FADE_DOWN_ANIMATION_VARIANTS}
             >
-                <div className=' flex flex-row justify-center'>
+                <div className=' flex flex-col md:flex-row items-center justify-center'>
                     <button
-                        className="group mx-2  mt-6 flex max-w-fit items-center justify-center space-x-2 rounded-full border border-gray-200 bg-white px-5 py-2 text-sm text-gray-500 transition-colors hover:bg-gray-500 hover:text-white"
+                        className="group mx-2 my-2  flex max-w-fit items-center justify-center space-x-2 rounded-full border border-gray-200 bg-white px-5 py-2 text-sm text-gray-500 transition-colors hover:bg-gray-500 hover:text-white"
                         onClick={(e) => {
                             e.preventDefault();
                             window.location.reload()
@@ -157,7 +148,7 @@ const Post = ({ taskData }) => {
                         <p>Refresh Task Status</p>
                     </button>
                     <button
-                        className="group mx-2  mt-6 flex max-w-fit items-center justify-center space-x-2 rounded-full border border-gray-200 bg-white px-5 py-2 text-sm text-gray-500 transition-colors hover:bg-gray-500 hover:text-white"
+                        className="group mx-2 my-2 flex max-w-fit items-center justify-center space-x-2 rounded-full border border-gray-200 bg-white px-5 py-2 text-sm text-gray-500 transition-colors hover:bg-gray-500 hover:text-white"
                         onClick={() => { navigator.clipboard.writeText(window.location.href) }}
                     >
                         <ClipboardCopy className="h-5 w-5 text-gray-500 group-hover:text-white" />
@@ -166,53 +157,21 @@ const Post = ({ taskData }) => {
                 <p className="mt-2 text-center text-xs text-gray-400">
                     <Balancer>Results usually take 2 to 3 minutes to process, you can copy the link and check again later on this link</Balancer>
                 </p>
-                <div className='flex flex-row items-center justify-center py-4'>
-                    <div className="inline-block py-2 align-middle md:px-6 lg:px-8">
-                        <div className="overflow-hidden border border-gray-200  md:rounded-lg">
-                            <table className="min-w-full divide-y divide-gray-200 ">
-                                <thead className="bg-gray-50 ">
-                                    <tr>
-                                        <th scope="col" className="py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 ">
-                                            <div className="flex items-center gap-x-3">
-                                                <span>Task ID</span>
-                                            </div>
-                                        </th>
-                                        <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 ">
-                                            Status
-                                        </th>
 
-                                        <th scope="col" className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 ">
-                                            Actions
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody className="bg-white divide-y divide-gray-200 ">
-                                    <tr>
-                                        <td className="px-4 py-4 text-sm font-medium text-gray-700  whitespace-nowrap">
-                                            <div className="inline-flex items-center gap-x-3">
-                                                <span>{tid}</span>
-                                            </div>
-                                        </td>
-                                        {
-                                            status
-                                        }
-                                        <td className="px-4 py-4 text-sm whitespace-nowrap">
-                                            <div className="flex items-center gap-x-6">
-                                                <a
-                                                    href={API_ENDPOINT + `/download/${tid}`}
-                                                    className={`text-blue-500 transition-colors duration-200 hover:text-indigo-500 focus:outline-none ${['SUCCESS'].includes(taskData.state) ? "" : "pointer-events-none"} flex flex-col items-center justify-center`}>
-                                                    <Download className="h-5 w-5 text-gray-500" />
-                                                    <p>Download</p>
-                                                </a>
-
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                </tbody>
-                            </table>
-                        </div>
+                <div className=' p-4 border rounded-2xl bg-white m-2 flex md:flex-row flex-col'>
+                    <div className='md:pr-4 flex flex-row items-center align-baseline'>
+                        <h1 className=' font-semibold text-gray-700 text-sm '>Task-ID:</h1>
+                        <p className=' px-2 text-gray-500 text-xs'>{tid}</p>
                     </div>
+                    <div className='flex flex-row items-center align-middle '>
+                        <h1 className='font-semibold text-gray-700 text-sm '>Status:</h1>
+                        {status}
+                    </div>
+                    {['SUCCESS'].includes(state) && <button className=" mt-2  bg-green-400 hover:bg-green-500 transition-colors py-2 px-2 rounded-xl inline-flex justify-center items-center">
+                        <Download className="h-5 w-5 text-white" />
+                        <span className=' px-2 text-white'>Download</span>
+                    </button>}
+
                 </div>
             </motion.div>
 

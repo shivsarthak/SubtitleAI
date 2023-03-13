@@ -9,15 +9,11 @@ services:
       - "7777:3000"
     depends_on:
       - api
-    environment:
-      - DOMAIN=https://subai.pro
-      - API_ENDPOINT=https://subai.pro/api
-      - TITLE=SubAI
-      - DESC="Automatically generate accurate subtitles for your videos with our user-friendly online tool. Our website uses advanced speech recognition technology to create SRT files quickly and easily. With our tool, you can improve your video accessibility, reach a wider audience, and save time on manual transcription. Try it out today and experience the benefits of our reliable subtitle generator!"
+
   redis:
     image: redis
   api:
-    image: 192.168.0.191:5000/subaipro/api:latest
+    image: 192.168.0.191:5000/subaipro/backend:latest
     build:
       context: ./server/
     command: waitress-serve --host 0.0.0.0 --port 8080 generate_subs:app
@@ -26,28 +22,30 @@ services:
     depends_on:
       - redis
     volumes:
-      - shared-data:/shared-data
+      - outputs:/outputs
+      - uploads:/uploads
     environment:
       - CELERY_BROKER_URL=redis://redis:6379
       - CELERY_BACKEND_URL=redis://redis:6379
-      - OUTPUT_FOLDER=/shared-data/output
-      - UPLOAD_FOLDER=/shared-data/temp
+      - OUTPUT_FOLDER=/outputs
+      - UPLOAD_FOLDER=/uploads
       - BUILD_MODE=PROD
 
   celery-worker:
-    image: 192.168.0.191:5000/subaipro/worker:latest
-    build: ./server
+    image: 192.168.0.191:5000/subaipro/backend:latest
     command: celery -A generate_subs.celery worker --loglevel=info
     depends_on:
       - redis
     volumes:
-      - shared-data:/shared-data
+      - outputs:/outputs
+      - uploads:/uploads
     environment:
       - CELERY_BROKER_URL=redis://redis:6379
       - CELERY_BACKEND_URL=redis://redis:6379
-      - OUTPUT_FOLDER=/shared-data/output
-      - UPLOAD_FOLDER=/shared-data/temp
+      - OUTPUT_FOLDER=/outputs
+      - UPLOAD_FOLDER=/uploads
       - BUILD_MODE=PROD
 
 volumes:
-  shared-data:
+  outputs:
+  uploads:

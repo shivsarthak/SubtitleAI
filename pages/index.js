@@ -32,7 +32,7 @@ export default function Home() {
     <Layout>
       <UploadModal />
       <motion.div
-        className="max-w-screen px-5 xl:px-0"
+        className="max-w-screen xl:px-0"
         initial="hidden"
         whileInView="show"
         animate="show"

@@ -14,8 +14,6 @@ from flask_socketio import SocketIO
 
 app = Flask(__name__)
 CORS(app)
-
-
 app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024 * 75
 app.config['UPLOAD_EXTENSIONS'] = ['mp4', 'avi', 'mov']
 app.config['PROCESSING_MODE'] = ['fast', 'balanced', 'accurate']
@@ -27,7 +25,7 @@ app.config['CELERY_BACKEND_URL'] = os.environ.get('CELERY_BACKEND_URL','redis://
 if os.environ.get('BUILD_MODE','DEV') == "PROD":
     app.config['HASH_SALT'] = os.urandom(8).hex()
 else:
-    app.config['HASH_SALT'] = b'testing'.hex()
+    app.config['HASH_SALT'] = b'testingsalt'.hex()
 
 socketio = SocketIO(app, cors_allowed_origins="*")
 celery = Celery(app.name, broker=app.config['CELERY_BROKER_URL'], backend=app.config['CELERY_BACKEND_URL'])
@@ -37,7 +35,7 @@ celery.conf.update(result_extended=True)
 def hash_id(id: str):
     return hashlib.md5((id+app.config['HASH_SALT']).encode('utf-8')).hexdigest()[0:8]
 
-
+print(os.environ.get('BUILD_MODE'))
 @celery.task(trail=True, bind=True)
 def generate_subtitles_task(self, video_name, model_size):
     print(self.request.id)
@@ -82,12 +80,12 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1] in app.config['UPLOAD_EXTENSIONS']
 
 
-@app.route('/')
+@app.route('/api')
 def post_run():
     return jsonify({'status':'Running'}),200
 
 
-@app.route('/upload_video', methods=['POST'])
+@app.route('/api/upload_video', methods=['POST'])
 def upload_video():
     if ('video' not in request.files) or ('mode' not in request.form):
         print('no video')
@@ -125,7 +123,7 @@ def upload_video():
     return jsonify({'id': payload}), 200
 
 
-@app.route('/task/<tid>')
+@app.route('/api/task/<tid>')
 def task_status(tid: str):
     if (tid.split('+').__len__() != 2):
         return jsonify(
@@ -148,7 +146,7 @@ def task_status(tid: str):
     return jsonify(res), 200
 
 
-@app.route('/download/<tid>')
+@app.route('/api/download/<tid>')
 def download_file(tid: str):
     if (tid.split('+').__len__() != 2):
         return jsonify(
@@ -165,11 +163,10 @@ def download_file(tid: str):
              }
         ), 404
     status = AsyncResult(app=celery, id=id)
-    if (status.ready()):
+    if (status.successful()):
         filename = os.path.join(app.config['OUTPUT_FOLDER'], status.result)
         if os.path.isfile(filename):
             return send_file(filename), 200
-
     return jsonify(
         {'state': "404",
             'error': f'File Not Found'

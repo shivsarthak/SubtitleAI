@@ -96,7 +96,7 @@ const UploadModal = ({
                             const formData = new FormData();
                             formData.append('video', video);
                             formData.append('mode', 'fast');
-                            fetch(API_ENDPOINT + "/upload_video",
+                            fetch(API_ENDPOINT+"/upload_video",
                                 {
                                     method: "POST",
                                     body: formData
