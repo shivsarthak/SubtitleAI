@@ -45,7 +45,7 @@ const UploadModal = ({
     const [video, setVideo] = useState();
     const [preview, setPreview] = useState();
     const [fileSizeTooBig, setFileSizeTooBig] = useState(false);
-
+    const [mode,setMode] = useState('fast');
     const [dragActive, setDragActive] = useState(false);
 
     const onChangePicture = useCallback(
@@ -95,8 +95,8 @@ const UploadModal = ({
                             setSaving(true);
                             const formData = new FormData();
                             formData.append('video', video);
-                            formData.append('mode', 'fast');
-                            fetch(API_ENDPOINT+"/upload_video",
+                            formData.append('mode', mode);
+                            fetch(API_ENDPOINT + "/upload_video",
                                 {
                                     method: "POST",
                                     body: formData
@@ -196,6 +196,19 @@ const UploadModal = ({
                                 onChange={onChangePicture}
                             />
                         </div>
+
+                        {
+                            video && <div>
+                                <p className="block text-sm mt-2 font-medium text-gray-700 pb-2">Select Processing Mode</p>
+                                <select defaultValue="fast" onChange={(e)=>{setMode(e.target.value)}} id="mode" className="bg-gray-50 border  border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full p-2.5">
+                                    <option value="fast">Choose a mode (Default:Fast)</option>
+                                    <option value="fast">Fast</option>
+                                    <option value="balanced">Balanced</option>
+                                    <option value="accurate">Accurate</option>
+                                </select>
+                            </div>
+                        }
+
                     </div>
 
 
