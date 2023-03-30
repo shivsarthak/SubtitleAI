@@ -41,7 +41,3 @@ To use the application, follow the steps below:
 ## Contributing
 
 If you'd like to contribute to this project, please fork the repository and make changes as you'd like. Pull requests are welcome!
-
-## License
-
-This project is licensed under the MIT License. See LICENSE file for more information.
