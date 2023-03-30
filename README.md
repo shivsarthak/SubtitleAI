@@ -1,6 +1,6 @@
 # AI Subtitle Generation Full Stack Application
 
-This repository contains a full stack application that generates subtitles for an uploaded video using artificial intelligence. The frontend is built using React and the backend is built using Flask and Celery with the help of ffmpeg and OpenAI's Openn Source Whisper models.
+This repository contains a full stack application that generates subtitles for an uploaded video using artificial intelligence. The frontend is built using Next.Js and the backend is built using Flask and Celery with the help of ffmpeg and OpenAI's Openn Source Whisper models.
 
 ## Installation
 
